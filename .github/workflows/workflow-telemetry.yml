@@ -5,6 +5,10 @@ on:
     workflows: [Delivery pipeline]
     types: [completed]
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   export:
     # workflow_run sempre dispara em completed; inclui sucesso, falha, cancelamento e erros de infraestrutura.
