@@ -13,7 +13,7 @@ jobs:
   export:
     if: >-
       ${{ contains(fromJSON('["success","failure","cancelled","timed_out","startup_failure","action_required"]'), github.event.workflow_run.conclusion) }}
-    uses: matheusyves/poc-telemetria/.github/workflows/collect-run.yml@v1.1.0
+    uses: matheusyves/poc-telemetria/.github/workflows/collect-run.yml@v1.2.0
     with:
       repository: ${{ github.repository }}
       run-id: ${{ github.event.workflow_run.id }}
