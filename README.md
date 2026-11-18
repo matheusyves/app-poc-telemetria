@@ -11,3 +11,5 @@ Em **Actions → Delivery pipeline → Run workflow**, execute cada cenário:
 - `deploy_failure`: qualidade, build e segurança passam, mas a validação pós-deploy falha.
 
 Ao encerrar, `Export workflow telemetry` é disparado por `workflow_run`, consulta os jobs e steps da execução e publica os sinais OTLP. Configure os secrets `OTLP_ENDPOINT` e, se necessário, `OTLP_HEADERS` para apontar para o Collector central.
+
+O consumidor está fixado na versão `v1.0.0` da biblioteca para evitar dependência de uma branch mutável.
