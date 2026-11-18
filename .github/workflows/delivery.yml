@@ -8,7 +8,7 @@ on:
         required: true
         type: choice
         default: success
-        options: [success, quality_failure, deploy_failure]
+        options: [success, quality_failure, build_failure, security_failure, deploy_failure]
 
 jobs:
   quality:
@@ -19,10 +19,14 @@ jobs:
   build_android:
     needs: quality
     uses: ./.github/workflows/build-android.yml
+    with:
+      fail: ${{ inputs.scenario == 'build_failure' }}
 
   security:
     needs: quality
     uses: ./.github/workflows/security.yml
+    with:
+      fail: ${{ inputs.scenario == 'security_failure' }}
 
   deploy:
     if: ${{ always() && needs.quality.result == 'success' && needs.build_android.result == 'success' && needs.security.result == 'success' }}

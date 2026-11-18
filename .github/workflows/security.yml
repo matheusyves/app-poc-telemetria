@@ -2,6 +2,12 @@ name: Security
 
 on:
   workflow_call:
+    inputs:
+      fail:
+        description: Simula reprovação no scan de segurança.
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   security:
@@ -12,6 +18,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Generate SBOM evidence
         run: |
+          if [[ "${{ inputs.fail }}" == "true" ]]; then
+            echo "Security scan reprovado: vulnerabilidade crítica sintética"
+            exit 41
+          fi
           printf '{"bomFormat":"CycloneDX","specVersion":"1.5","components":[]}' > sbom.cdx.json
       - name: Upload SBOM
         uses: actions/upload-artifact@v4
