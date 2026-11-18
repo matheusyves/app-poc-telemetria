@@ -1,0 +1,32 @@
+name: Delivery pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      scenario:
+        description: Cenário a demonstrar no trace OTEL.
+        required: true
+        type: choice
+        default: success
+        options: [success, quality_failure, deploy_failure]
+
+jobs:
+  quality:
+    uses: ./.github/workflows/quality.yml
+    with:
+      fail: ${{ inputs.scenario == 'quality_failure' }}
+
+  build_android:
+    needs: quality
+    uses: ./.github/workflows/build-android.yml
+
+  security:
+    needs: quality
+    uses: ./.github/workflows/security.yml
+
+  deploy:
+    if: ${{ always() && needs.quality.result == 'success' && needs.build_android.result == 'success' && needs.security.result == 'success' }}
+    needs: [quality, build_android, security]
+    uses: ./.github/workflows/deploy.yml
+    with:
+      fail: ${{ inputs.scenario == 'deploy_failure' }}

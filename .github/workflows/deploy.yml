@@ -1,0 +1,26 @@
+name: Deploy
+
+on:
+  workflow_call:
+    inputs:
+      fail:
+        description: Simula falha de deploy.
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  deploy:
+    name: deploy-staging
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - name: Publish release
+        run: echo "Publicando versão $GITHUB_SHA em staging"
+      - name: Verify deployment
+        run: |
+          if [[ "${{ inputs.fail }}" == "true" ]]; then
+            echo "Smoke test falhou: erro sintético de deploy"
+            exit 42
+          fi
+          echo "Smoke test aprovado"

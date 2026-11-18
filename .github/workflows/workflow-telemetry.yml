@@ -1,0 +1,18 @@
+name: Export workflow telemetry
+
+on:
+  workflow_run:
+    workflows: [Delivery pipeline]
+    types: [completed]
+
+jobs:
+  export:
+    # workflow_run sempre dispara em completed; inclui sucesso, falha, cancelamento e erros de infraestrutura.
+    if: >-
+      ${{ contains(fromJSON('["success","failure","cancelled","timed_out","startup_failure","action_required"]'), github.event.workflow_run.conclusion) }}
+    uses: matheusyves/poc-telemetria/.github/workflows/collect-run.yml@main
+    with:
+      repository: ${{ github.repository }}
+      run-id: ${{ github.event.workflow_run.id }}
+      conclusion: ${{ github.event.workflow_run.conclusion }}
+    secrets: inherit
