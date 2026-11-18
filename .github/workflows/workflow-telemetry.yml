@@ -11,7 +11,6 @@ permissions:
 
 jobs:
   export:
-    # workflow_run sempre dispara em completed; inclui sucesso, falha, cancelamento e erros de infraestrutura.
     if: >-
       ${{ contains(fromJSON('["success","failure","cancelled","timed_out","startup_failure","action_required"]'), github.event.workflow_run.conclusion) }}
     uses: matheusyves/poc-telemetria/.github/workflows/collect-run.yml@v1.1.0
